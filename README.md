@@ -29,3 +29,6 @@ json a enviar al servicio=
     "building_year": 2011
 
 }
+
+-- para las pruebas unitarias se creo la carpeta test y se hizo la importacion de la dependencia unittest
+comando para correr las pruebas :python -m unittest discover -s app/tests (debes estar ubicado en la ruta del proyecto)

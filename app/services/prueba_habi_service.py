@@ -107,7 +107,6 @@ def ValidarString(string_p):
     
     for palabra in palabras_prohibidas:
         if palabra in string_p:
-            print("aqui es ")
-            return 422, f"La palabra '{palabra}' no debe usarse en la solicitud ."
+            return 422, f"La palabra {palabra} no debe usarse en la solicitud"
 
     return 1,"success"
