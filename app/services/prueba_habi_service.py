@@ -47,32 +47,33 @@ def ConsultarPropiedades(status, building_year,city):
             return codigo,dato
     # query principal
     query = f"""SELECT 
-        MAX(p.id) AS property_id,
-        p.description,
-        p.address,
-        p.city,
-        p.price,
-        st.name
-    FROM 
-        property p
-    INNER JOIN 
-        status_history sh ON p.id = sh.property_id
-    INNER JOIN 
-        status st ON sh.status_id = st.id
-    WHERE 
-        st.id NOT IN (1, 2)
-        {validate_building_year}
-        {validate_city}
-        {validate_state}
-        AND sh.update_date = (
-            SELECT MAX(sh2.update_date)
-            FROM status_history sh2
-            WHERE sh2.property_id = p.id
-        )
-    GROUP BY 
-        p.id, p.description, p.address, p.city, p.price, st.name
-    ORDER BY 
-        sh.update_date DESC;"""
+            MAX(p.id) AS property_id,
+            IFNULL(NULLIF(p.description, ''), 'sin asignar') AS description,
+            IFNULL(NULLIF(p.address, ''), 'sin asignar') AS address,
+            IFNULL(NULLIF(p.city, ''), 'sin asignar') AS city,
+            IFNULL(p.price, 'sin asignar') AS price, 
+            IFNULL(NULLIF(st.name, ''), 'sin asignar') AS status_name
+        FROM 
+            property p
+        INNER JOIN 
+            status_history sh ON p.id = sh.property_id
+        INNER JOIN 
+            status st ON sh.status_id = st.id
+        WHERE 
+            st.id NOT IN (1, 2)
+            {validate_building_year}
+            {validate_city}
+            {validate_state}
+            AND sh.update_date = (
+                SELECT MAX(sh2.update_date)
+                FROM status_history sh2
+                WHERE sh2.property_id = p.id
+            )
+        GROUP BY 
+            p.id, p.description, p.address, p.city, p.price, st.name
+        ORDER BY 
+            sh.update_date DESC;
+        """
     
     cursor.execute(query)
     #traigo todos los dato de la consulta
