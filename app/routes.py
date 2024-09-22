@@ -13,6 +13,10 @@ class RequestHandler(BaseHTTPRequestHandler):
             try:
                 
                 data = json.loads(json_data)
+                if len(data)>1:
+                    self.send_response(422)
+                    self.end_headers()
+                    self.wfile.write(json.dumps({'error': 'Invalid JSON'}).encode())
                 status = data.get('status')
                 building_year = data.get('building_year')
                 city=data.get('city')
