@@ -1,8 +1,11 @@
+# se usa la dependencia mysqk connector para la conexion a la base de datos 
 import mysql.connector
 from mysql.connector import Error
+#se crea funcion para conectar a la base de datos 
 def ConectarBd():
     try:
         connection = mysql.connector.connect(
+            #parametros de conexion 
             host='18.221.137.98',
             port='3309',         
             database='habi_db',
@@ -17,6 +20,7 @@ def ConectarBd():
         return None
 
 def CerrarConexion(connection):
+    #cerrar conexion a la base de datos 
     if connection.is_connected():
         connection.close()
         print("Conexión cerrada")

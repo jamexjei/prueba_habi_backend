@@ -1,9 +1,12 @@
+# se hace la importacion de BaseHTTPRequestHandler  para recibir la peticion 
 from http.server import BaseHTTPRequestHandler
 import json
+#se hace la importacion desde el archivo service a el metodo principal que contiene la logica de busqueda 
 from app.services.prueba_habi_service import ConsultarPropiedades
 
 class RequestHandler(BaseHTTPRequestHandler):
     def do_POST(self):
+        #aqui se realiza la validacion de que la ruta sea la correcta y asi validar el json que se está recibiendo
         if self.path.startswith('/api/consultarPropiedades'):
             content_length = int(self.headers['Content-Length'])
             json_data = self.rfile.read(content_length)  
