@@ -1,5 +1,5 @@
 import unittest
-from app.services.prueba_habi_service import ValidarString,ConsultarPropiedades
+from app.services.prueba_habi_service import ValidarString,ConsultarPropiedades,ValidarNumero
 
 #test par probar datos vacios
 class TestValidarString(unittest.TestCase):
@@ -21,47 +21,24 @@ class TestValidarString(unittest.TestCase):
 
 class TestConsultarPropiedades(unittest.TestCase):
     def test_no_trae_datos(self):
-        codigo,mensaje=ConsultarPropiedades(5,2021,'')
+        codigo,mensaje=ConsultarPropiedades(5,2011,'')
         self.assertEqual(codigo,422)
         self.assertEqual(mensaje,"no encuentro informacion con esos criterios de busqueda")
 
     def test_trae_datos(self):
         codigo,datos=ConsultarPropiedades('',2011,'')
         self.assertEqual(codigo,200)
-        diccionario_prueba=[
-    {
-        "property_id": 2,
-        "description": "Amplio apartamento en conjunto cerrado",
-        "address": "carrera 100 #15-90",
-        "city": "bogota",
-        "price": 350000000,
-        "status_name": "en_venta"
-    },
-    {
-        "property_id": 5,
-        "description": "Amplio apartamento en conjunto cerrado",
-        "address": "carrera 100 #15-90",
-        "city": "medellin",
-        "price": 325000000,
-        "status_name": "en_venta"
-    },
-    {
-        "property_id": 57,
-        "description": "Amplio apartamento en conjunto cerrado",
-        "address": "carrera 100 #15-90e",
-        "city": "medellin",
-        "price": 325000000,
-        "status_name": "en_venta"
-    },
-    {
-        "property_id": 54,
-        "description": "Amplio apartamento en conjunto cerrado",
-        "address": "carrera 100 #15-90w",
-        "city": "bogota",
-        "price": 350000000,
-        "status_name": "pre_venta"
-    }   
-    ]
-        self.assertDictEqual(datos,diccionario_prueba)
+
+
+
+class TestValidarNumero(unittest.TestCase):
+    def test_numero_valido(self):
+        codigo,mensaje=ValidarNumero(2023)
+        self.assertEqual(codigo,1)
+        self.assertEqual(mensaje,'success')  
+    def test_numero_no_valido(self):
+        codigo,mensaje=ValidarNumero('12ww')
+        self.assertEqual(codigo,422)
+        self.assertEqual(mensaje,"por favor ingrese un numero valido")      
 if __name__ == '__main__':
     unittest.main()

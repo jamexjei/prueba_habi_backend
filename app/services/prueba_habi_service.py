@@ -17,19 +17,25 @@ def ConsultarPropiedades(status, building_year,city):
     validate_city=''
     #la funcion ValidarNumero tiene como objetivo  validar si el dato que envia el front es un numero  entero valido 
     if status:
-        status=ValidarNumero(status)
+        codigo,mensaje=ValidarNumero(status)
         #nota aqui estoy esperando que el frontend envie el id del estado .
         # se hace entender que ya existe un microservicio que lista los estados
         #si gustan puedo hacer el servicio que reciba un string 
-        validate_state=f"and sh.id={status}"
+        if codigo==1:
+            validate_state=f"and sh.id={status}"
+        else:
+            return codigo,mensaje
+        
     if building_year:
 
-        building_year=ValidarNumero(building_year)
-        if building_year>today.year:
-            mensaje="el año no puede ser mayor a la fecha actual"
-            return 422,mensaje
-        validate_building_year=f"and p.year={building_year}"
-    
+        codigo,mensaje=ValidarNumero(building_year)
+        if codigo==1:
+            if building_year>today.year:
+                mensaje="el año no puede ser mayor a la fecha actual"
+                return 422,mensaje
+            validate_building_year=f"and p.year={building_year}"
+        else:
+            return codigo,mensaje
     if city:
         print(city)
         # se llama la funcion validar string para prevenir inyeccion sql en los string 
@@ -96,9 +102,9 @@ def ValidarNumero(numero):
     try:
         numero=int(numero)
         if isinstance(numero, int):
-            return numero
+            return 1,"success"
     except ValueError:
-        mensaje="por favor ingrese un id valido "
+        mensaje="por favor ingrese un numero valido"
         return 422,mensaje
     
 def ValidarString(string_p):
